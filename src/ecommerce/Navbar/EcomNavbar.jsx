@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Menu, X, ShoppingCart, User } from "lucide-react";
 import { logo } from "../../imports";
 import { Link } from "react-router";
-import { useCart } from "../Contexts/CartContext"; 
+import { useCart } from "../Contexts/CartContext";
 
 const EcomNavbar = () => {
-  const {totalItems} = useCart()
+  const { totalItems } = useCart();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -17,11 +17,11 @@ const EcomNavbar = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/ecommerce" className="font-bold text-indigo-600">
-              <img className="h-10" src={logo}></img>
+              <img className="h-10" src={logo} alt="JustLink Logo" />
             </Link>
           </div>
 
-          {/* Search Bar */}
+          {/* Search Bar (Desktop only) */}
           <div className="hidden md:flex flex-1 mx-4">
             <input
               type="text"
@@ -38,30 +38,50 @@ const EcomNavbar = () => {
             >
               Categories
             </Link>
-            <a href="/ecommerce/contact" className="text-gray-700 hover:text-customBlue">
+            <Link
+              to="/ecommerce/contact"
+              className="text-gray-700 hover:text-customBlue"
+            >
               Contact
-            </a>
+            </Link>
             {/* User Account */}
-            <Link to={"/ecommerce/register"}>
+            <Link to="/ecommerce/register">
               <User className="h-6 w-6 text-gray-700 hover:text-customBlue cursor-pointer" />
             </Link>
-            {/* Cart */}
+
+            {/* Cart Icon */}
             <div className="relative">
-              <Link to={"/ecommerce/cart"}>
-              <ShoppingCart className="h-6 w-6 text-gray-700 hover:text-customBlue cursor-pointer" />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">
-                {totalItems}
-              </span>
+              <Link to="/ecommerce/cart">
+                <ShoppingCart className="h-6 w-6 text-gray-700 hover:text-customBlue cursor-pointer" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">
+                    {totalItems}
+                  </span>
+                )}
               </Link>
             </div>
 
-            <Link to={"/ecommerce/become-a-vendor"}>
-            <div className="cursor-pointer bg-customGreen rounded-xl px-2 py-1 text-white">Become a vendor</div>
+            {/* Become a Vendor */}
+            <Link to="/ecommerce/become-a-vendor">
+              <div className="cursor-pointer bg-customGreen rounded-xl px-3 py-1 text-white text-sm font-medium">
+                Become a vendor
+              </div>
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden">
+          {/* Mobile Right Section (Menu + Cart) */}
+          <div className="flex items-center gap-4 md:hidden">
+            {/* Cart visible on mobile */}
+            <Link to="/ecommerce/cart" className="relative">
+              <ShoppingCart className="h-6 w-6 text-gray-700 hover:text-indigo-600" />
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
+
+            {/* Mobile Menu Toggle */}
             <button
               onClick={toggleMenu}
               className="text-gray-700 hover:text-indigo-600 focus:outline-none"
@@ -76,37 +96,42 @@ const EcomNavbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Dropdown Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white px-2 pt-2 pb-4 space-y-1 shadow-md">
+        <div className="md:hidden bg-white px-4 pt-4 pb-6 space-y-5 shadow-md">
           <input
             type="text"
             placeholder="Search products..."
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2"
           />
+
           <Link
             to="/ecommerce/categories"
             className="block text-gray-700 hover:text-indigo-600"
           >
             Categories
           </Link>
+
           <Link
-            to="ecommerce/contact"
+            to="/ecommerce/contact"
             className="block text-gray-700 hover:text-indigo-600"
           >
             Contact
           </Link>
-          <div className="flex items-center space-x-4 mt-2">
-            <User className="h-6 w-6 text-gray-700 hover:text-indigo-600 cursor-pointer" />
-            <div className="relative">
-              <ShoppingCart className="h-6 w-6 text-gray-700 hover:text-indigo-600 cursor-pointer" />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1">
-                {totalItems}
-              </span>
-            </div>
-          </div>
 
-          <div>Become a vendor</div>
+          <Link
+            to="/ecommerce/register"
+            className="block text-gray-700 hover:text-indigo-600 flex items-center gap-2"
+          >
+            <User className="h-5 w-5" /> Account
+          </Link>
+
+          <Link
+            to="/ecommerce/become-a-vendor"
+            className="block text-center bg-customGreen text-white py-2 rounded-lg font-medium hover:opacity-90"
+          >
+            Become a vendor
+          </Link>
         </div>
       )}
     </nav>
