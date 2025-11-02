@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCart } from "../../contexts/CartContext";
+import { useCart } from "../../Contexts/CartContext";
 import { Trash2, Plus, Minus } from "lucide-react";
 import EcomAuthPage from "../EcomAuthPage/EcomAuthPage";
 

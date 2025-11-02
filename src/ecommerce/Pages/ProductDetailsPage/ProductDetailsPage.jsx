@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Minus, Plus, ShoppingCart, CreditCard } from "lucide-react";
 import { Link } from "react-router";
-import { useCart } from "../../contexts/CartContext"; 
+import { useCart } from "../../Contexts/CartContext"; 
 
 const ProductDetailsPage = () => {
   const { addToCart } = useCart(); //
