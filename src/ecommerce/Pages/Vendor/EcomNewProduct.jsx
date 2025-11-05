@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { baseUrl } from "../../baseUrl";
 import { useNavigate } from "react-router";
+import { useUser } from "../../Contexts/UserContext";
 
 const EcomNewProduct = () => {
   const [product, setProduct] = useState({
@@ -16,6 +17,8 @@ const EcomNewProduct = () => {
   const [previews, setPreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user, api } = useUser();
+  console.log(user);
 
   // Handle input text changes
   const handleChange = (e) => {
@@ -50,7 +53,7 @@ const EcomNewProduct = () => {
     });
 
     try {
-      await axios.post(`${baseUrl}newproduct`, formData, {
+      await api.post(`${baseUrl}vendor/new-product`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -64,7 +67,7 @@ const EcomNewProduct = () => {
         location: "",
       });
       setPreviews([]);
-      navigate("/");
+      navigate("/ecommerce/profile/:id");
     } catch (err) {
       console.error(err);
       alert("Failed to upload product");
@@ -72,6 +75,12 @@ const EcomNewProduct = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user.role !== "Vendor") {
+      return navigate("/ecommerce");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-10">

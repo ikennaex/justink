@@ -3,10 +3,12 @@ import { Menu, X, ShoppingCart, User } from "lucide-react";
 import { logo } from "../../imports";
 import { Link } from "react-router";
 import { useCart } from "../Contexts/CartContext";
+import { useUser } from "../Contexts/UserContext";
 
 const EcomNavbar = () => {
   const { totalItems } = useCart();
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isAuthenticated, accessToken } = useUser();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -45,8 +47,23 @@ const EcomNavbar = () => {
               Contact
             </Link>
             {/* User Account */}
-            <Link to="/ecommerce/register">
-              <User className="h-6 w-6 text-gray-700 hover:text-customBlue cursor-pointer" />
+            <Link
+              to={isAuthenticated ? "ecommerce/profile/:id" : "/ecommerce/register"}
+            >
+              <div className="flex items-center gap-2">
+                <User
+                  className={`h-6 w-6 transition-colors duration-200 cursor-pointer ${
+                    isAuthenticated
+                      ? "text-customBlue"
+                      : "text-gray-600 hover:text-customBlue"
+                  }`}
+                />
+                {isAuthenticated && (
+                  <span className="bg-customBlue/10 text-customBlue font-medium px-3 py-1 rounded-lg shadow-sm hover:bg-customBlue/20 transition-all duration-200">
+                    {user?.fullName}
+                  </span>
+                )}
+              </div>
             </Link>
 
             {/* Cart Icon */}
@@ -62,11 +79,13 @@ const EcomNavbar = () => {
             </div>
 
             {/* Become a Vendor */}
-            <Link to="/ecommerce/become-a-vendor">
-              <div className="cursor-pointer bg-customGreen rounded-xl px-3 py-1 text-white text-sm font-medium">
-                Become a vendor
-              </div>
-            </Link>
+            {isAuthenticated && !user?.role === "vendor" && (
+              <Link to="/ecommerce/become-a-vendor">
+                <div className="cursor-pointer bg-customGreen rounded-xl px-3 py-1 text-white text-sm font-medium">
+                  Become a vendor
+                </div>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Right Section (Menu + Cart) */}
@@ -120,18 +139,32 @@ const EcomNavbar = () => {
           </Link>
 
           <Link
-            to="/ecommerce/register"
-            className="block text-gray-700 hover:text-indigo-600 flex items-center gap-2"
+            to={isAuthenticated ? "ecommerce/profile/:id" : "/ecommerce/register"}
           >
-            <User className="h-5 w-5" /> Account
+            <div className="flex items-center gap-2">
+              <User
+                className={`h-6 w-6 transition-colors duration-200 cursor-pointer ${
+                  isAuthenticated
+                    ? "text-customBlue"
+                    : "text-gray-600 hover:text-customBlue"
+                }`}
+              />
+              {isAuthenticated && (
+                <span className="bg-customBlue/10 text-customBlue font-medium px-3 py-1 rounded-lg shadow-sm hover:bg-customBlue/20 transition-all duration-200">
+                  {user?.fullName}
+                </span>
+              )}
+            </div>
           </Link>
 
-          <Link
-            to="/ecommerce/become-a-vendor"
-            className="block text-center bg-customGreen text-white py-2 rounded-lg font-medium hover:opacity-90"
-          >
-            Become a vendor
-          </Link>
+          {isAuthenticated && !user?.role === "vendor" && (
+            <Link
+              to="/ecommerce/become-a-vendor"
+              className="block text-center bg-customGreen text-white py-2 rounded-lg font-medium hover:opacity-90"
+            >
+              Become a vendor
+            </Link>
+          )}
         </div>
       )}
     </nav>

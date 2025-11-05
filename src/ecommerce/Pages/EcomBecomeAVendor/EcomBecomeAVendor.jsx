@@ -1,6 +1,40 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { baseUrl } from "../../baseUrl";
+import { useUser } from "../../Contexts/UserContext";
+import { useNavigate } from "react-router";
 
 const EcomBecomeAVendor = () => {
+  const [businessName, setBusinessName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [storeDescription, setStoreDescription] = useState("");
+  const { api } = useUser();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      const response = await api.post(`${baseUrl}become-a-vendor`, {
+        businessName,
+        phoneNumber,
+        address,
+        storeDescription,
+      });
+      alert(response.data.message);
+      navigate("/ecommerce");
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      alert(err.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="flex items-center justify-center min-h-screen py-10 px-4">
       <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-8">
@@ -10,18 +44,20 @@ const EcomBecomeAVendor = () => {
             Become a Vendor
           </h2>
           <p className="text-sm text-blue-600 font-semibold">
-            Please ensure you supply only <span className="underline">correct</span> information.
+            Please ensure you supply only{" "}
+            <span className="underline">correct</span> information.
           </p>
         </div>
 
         {/* Form */}
-        <form className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Business Name */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Business Name
             </label>
             <input
+              onChange={(e) => setBusinessName(e.target.value)}
               type="text"
               name="businessName"
               placeholder="Enter your business name"
@@ -36,6 +72,7 @@ const EcomBecomeAVendor = () => {
               Phone Number
             </label>
             <input
+              onChange={(e) => setPhoneNumber(e.target.value)}
               type="tel"
               name="phoneNumber"
               placeholder="Enter your phone number"
@@ -50,6 +87,7 @@ const EcomBecomeAVendor = () => {
               Address
             </label>
             <input
+              onChange={(e) => setAddress(e.target.value)}
               type="text"
               name="address"
               placeholder="Enter your business or personal address"
@@ -64,6 +102,7 @@ const EcomBecomeAVendor = () => {
               Store Description
             </label>
             <textarea
+              onChange={(e) => setStoreDescription(e.target.value)}
               name="storeDescription"
               placeholder="Describe your store..."
               rows="4"

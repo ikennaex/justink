@@ -12,6 +12,7 @@ import EcomBecomeAVendor from './ecommerce/Pages/EcomBecomeAVendor/EcomBecomeAVe
 import EcomContactPage from './ecommerce/Pages/EcomContactPage/EcomContactPage'
 import EcomCartPage from './ecommerce/Pages/EcomCartPage/EcomCartPage'
 import EcomNewProduct from './ecommerce/Pages/Vendor/EcomNewProduct'
+import UserProfile from './ecommerce/Pages/UserProfile/UserProfile'
 
 
 const App = () => {
@@ -30,6 +31,8 @@ const App = () => {
         <Route path='/ecommerce/product/:id' element = {<ProductDetailsPage/>} />
         <Route path='/ecommerce/become-a-vendor' element = {<EcomBecomeAVendor/>} />
         <Route path='/ecommerce/cart' element = {<EcomCartPage/>} />
+
+        <Route path='/ecommerce/profile/:id' element = {<UserProfile/>} />
 
         <Route path='/ecommerce/new-product' element = {<EcomNewProduct/>} />
       </Routes>
