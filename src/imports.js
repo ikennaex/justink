@@ -5,5 +5,7 @@ import toys from "./assets/toys.png"
 import beauty from "./assets/beauty.png"
 import fashion from "./assets/fashion.png"
 import electronics from "./assets/electronics.png"
+import loghero from "./assets/loghero.jpg"
+import aboutimg from "./assets/aboutimg.jpeg"
 
-export {logo, pets, sports, toys, beauty, fashion, electronics}
+export {logo, pets, sports, toys, beauty, fashion, electronics, loghero, aboutimg}
