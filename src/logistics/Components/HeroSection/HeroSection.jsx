@@ -1,6 +1,7 @@
 import React from "react";
 import {loghero} from "../../../imports"; // ensure this is correct
 import { Search } from "lucide-react";
+import { Link } from "react-router";
 
 const HeroSection = () => {
   return (
@@ -44,8 +45,8 @@ const HeroSection = () => {
             <button
               className="px-5 py-3 rounded-xl font-semibold flex items-center gap-2"
               style={{ backgroundColor: "#33751D" }}
-            >
-              Send Package
+            ><Link to='sendpackage'>
+              Send Package</Link>
             </button>
 
             <button className="border border-white px-5 py-3 rounded-xl hover:bg-white hover:text-black transition">

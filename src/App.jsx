@@ -19,6 +19,7 @@ import TrackHome from './logistics/Pages/Track/TrackHome'
 import Contact from './logistics/Pages/Contact/Contact'
 import Services from './logistics/Pages/Services/Services'
 import About from './logistics/Pages/About/About'
+import SendPackage from './logistics/Pages/SendPackage/SendPackage'
 
 const App = () => {
 
@@ -56,6 +57,7 @@ const App = () => {
           <Route path='/logistics/contact' element={<Contact />} />
           <Route path='/logistics/services' element={<Services />} />
           <Route path='/logistics/about' element={<About />} />
+          <Route path='/logistics/sendpackage' element={<SendPackage />} />
         </Routes>
       </div>
 
