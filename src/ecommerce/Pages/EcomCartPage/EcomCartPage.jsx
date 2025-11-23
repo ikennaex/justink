@@ -3,6 +3,7 @@ import { useCart } from "../../Contexts/CartContext";
 import { Trash2, Plus, Minus } from "lucide-react";
 import EcomAuthPage from "../EcomAuthPage/EcomAuthPage";
 import { useUser } from "../../Contexts/UserContext";
+import EcomCheckout from "../../Components/Checkout/EcomCheckout";
 
 const EcomCartPage = () => {
   const { cartItems, removeFromCart, updateQuantity, totalPrice, clearCart } =
@@ -38,11 +39,11 @@ const EcomCartPage = () => {
               <div className="space-y-6">
                 {cartItems.map((item) => (
                   <div
-                    key={item.id}
+                    key={item._id}
                     className="flex flex-col sm:flex-row items-center gap-4 border-b border-gray-200 pb-6"
                   >
                     <img
-                      src={item.image}
+                      src={item.imgUrl[0]}
                       alt={item.name}
                       className="w-24 h-24 object-cover rounded-lg"
                     />
@@ -56,7 +57,7 @@ const EcomCartPage = () => {
                       <div className="flex items-center mt-2 gap-3">
                         <button
                           onClick={() =>
-                            updateQuantity(item.id, Math.max(1, item.quantity - 1))
+                            updateQuantity(item._id, Math.max(1, item.quantity - 1))
                           }
                           className="p-1 border rounded hover:bg-gray-100"
                         >
@@ -66,7 +67,7 @@ const EcomCartPage = () => {
                         <span className="text-lg font-medium">{item.quantity}</span>
 
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item._id, item.quantity + 1)}
                           className="p-1 border rounded hover:bg-gray-100"
                         >
                           <Plus size={16} />
@@ -79,7 +80,7 @@ const EcomCartPage = () => {
                         ₦{(item.price * item.quantity).toLocaleString()}
                       </p>
                       <button
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(item._id)}
                         className="text-red-500 hover:text-red-700 flex items-center gap-1 mt-2"
                       >
                         <Trash2 size={16} /> Remove
@@ -121,12 +122,14 @@ const EcomCartPage = () => {
                   />
                 </div>
 
-                <button
+                {/* <button
                   type="submit"
                   className="w-full bg-customBlue text-white py-3 rounded-lg font-semibold hover:bg-customBlue/90 transition-all duration-200"
                 >
                   Proceed to Payment
-                </button>
+                </button> */}
+
+                <EcomCheckout cartItems={cartItems} totalPrice = {totalPrice} />
               </form>
             </div>
           )}

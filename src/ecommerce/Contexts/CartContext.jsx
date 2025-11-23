@@ -24,10 +24,10 @@ export const CartProvider = ({ children }) => {
   // Add product to cart
   const addToCart = (product) => {
     setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const existing = prev.find((item) => item._id === product._id);
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id
+          item._id === product._id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
@@ -38,13 +38,13 @@ export const CartProvider = ({ children }) => {
 
   // Remove product from cart
   const removeFromCart = (id) =>
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+    setCartItems((prev) => prev.filter((item) => item._id !== id));
 
   // Update item quantity
   const updateQuantity = (id, qty) => {
     setCartItems((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, quantity: qty } : item
+        item._id === id ? { ...item, quantity: qty } : item
       )
     );
   };

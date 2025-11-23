@@ -47,7 +47,7 @@ const App = () => {
           <Route path='/ecommerce/product/:id' element={<ProductDetailsPage />} />
           <Route path='/ecommerce/become-a-vendor' element={<EcomBecomeAVendor />} />
           <Route path='/ecommerce/cart' element={<EcomCartPage />} />
-          <Route path='/ecommerce/profile/:id' element={<UserProfile />} />
+          <Route path='/ecommerce/profile' element={<UserProfile />} />
           <Route path='/ecommerce/new-product' element={<EcomNewProduct />} />
 
           {/* Logistics Routes */}

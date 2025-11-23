@@ -84,13 +84,13 @@ const ProductDetailsPage = () => {
           </div>
 
           <p className="mt-4 text-sm">
-            Vendor: <Link className="text-customBlue">{product.vendor.businessName}</Link>
+            Vendor: <Link className="text-customBlue">{product.vendor?.businessName || "N/A"}</Link>
           </p>
 
           <div className="mt-6 border-t border-gray-200 pt-4">
             <h3 className="font-semibold mb-2">About product</h3>
             <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
-              {product.description}
+              {product.desc}
             </p>
           </div>
 

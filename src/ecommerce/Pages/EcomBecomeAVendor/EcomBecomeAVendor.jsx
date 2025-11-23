@@ -9,7 +9,7 @@ const EcomBecomeAVendor = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [storeDescription, setStoreDescription] = useState("");
-  const { api } = useUser();
+  const { api, setUser } = useUser();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -25,7 +25,8 @@ const EcomBecomeAVendor = () => {
         storeDescription,
       });
       alert(response.data.message);
-      navigate("/ecommerce");
+      setUser(prev => ({ ...prev, role: "Vendor" }));
+      navigate("/ecommerce/profile");
     } catch (err) {
       setLoading(false);
       console.log(err);

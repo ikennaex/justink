@@ -48,7 +48,7 @@ const EcomNavbar = () => {
             </Link>
             {/* User Account */}
             <Link
-              to={isAuthenticated ? "ecommerce/profile/:id" : "/ecommerce/register"}
+              to={isAuthenticated ? "ecommerce/profile" : "/ecommerce/register"}
             >
               <div className="flex items-center gap-2">
                 <User
@@ -79,7 +79,7 @@ const EcomNavbar = () => {
             </div>
 
             {/* Become a Vendor */}
-            {isAuthenticated && !user?.role === "vendor" && (
+            {isAuthenticated && user?.role !== "Vendor" && (
               <Link to="/ecommerce/become-a-vendor">
                 <div className="cursor-pointer bg-customGreen rounded-xl px-3 py-1 text-white text-sm font-medium">
                   Become a vendor
@@ -139,7 +139,7 @@ const EcomNavbar = () => {
           </Link>
 
           <Link
-            to={isAuthenticated ? "ecommerce/profile/:id" : "/ecommerce/register"}
+            to={isAuthenticated ? "ecommerce/profile" : "/ecommerce/register"}
           >
             <div className="flex items-center gap-2">
               <User
@@ -157,7 +157,7 @@ const EcomNavbar = () => {
             </div>
           </Link>
 
-          {isAuthenticated && !user?.role === "vendor" && (
+          {isAuthenticated && user?.role !== "Vendor" && (
             <Link
               to="/ecommerce/become-a-vendor"
               className="block text-center bg-customGreen text-white py-2 rounded-lg font-medium hover:opacity-90"

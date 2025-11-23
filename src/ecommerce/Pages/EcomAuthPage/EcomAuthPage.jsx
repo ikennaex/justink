@@ -1,8 +1,41 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useUser } from "../../Contexts/UserContext";
+import { baseUrl } from "../../baseUrl";
 
-const EcomAuthPage = ({showModal, setShowModal}) => {
+const EcomAuthPage = ({ showModal, setShowModal }) => {
   const [auth, setAuth] = useState("Login");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { setAccessToken } = useUser();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const { api, setUser } = useUser();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      const response = await api.post(`${baseUrl}auth/login`, {
+        email,
+        password,
+      });
+      console.log(response.data);
+      setUser(response.data.user);
+      setAccessToken(response.data.accessToken);
+      // setRefreshToken(response.data.refreshToken);
+      alert(response.data.message);
+      navigate("/ecommerce");
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      alert(err.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (!showModal) return null; // hide modal when closed
 
@@ -29,12 +62,13 @@ const EcomAuthPage = ({showModal, setShowModal}) => {
             </div>
 
             {/* Form */}
-            <form className="space-y-5">
+            <form onSubmit={handleLogin} className="space-y-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Email Address
                 </label>
                 <input
+                onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   placeholder="Enter your email"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none"
@@ -47,6 +81,7 @@ const EcomAuthPage = ({showModal, setShowModal}) => {
                   Password
                 </label>
                 <input
+                onChange={(e) => setPassword(e.target.value)}
                   type="password"
                   placeholder="Enter your password"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none"
@@ -55,10 +90,11 @@ const EcomAuthPage = ({showModal, setShowModal}) => {
               </div>
 
               <button
+              disabled={loading}
                 type="submit"
                 className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-lg transition"
               >
-                Sign In
+                {loading ? "Processing..." : "Sign In"}
               </button>
             </form>
 
