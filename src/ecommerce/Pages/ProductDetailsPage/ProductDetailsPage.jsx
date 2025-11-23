@@ -1,37 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Minus, Plus, ShoppingCart, CreditCard } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import { useCart } from "../../Contexts/CartContext"; 
+import axios from "axios";
+import { baseUrl } from "../../baseUrl";
 
 const ProductDetailsPage = () => {
-  const { addToCart } = useCart(); //
+  const { addToCart } = useCart(); 
+  const [product, setProduct] = useState({})
+  const {id} = useParams();
 
-  const product = {
-    id: 1, 
-    name: "Electric Iron",
-    category: "ELECTRONICS",
-    price: 155679.8,
-    description: `
-      Beats Studio Buds TWS earphones with charging case deliver studio-quality sound.
-      - ANC technology controls unwanted noise by blocking background sounds.
-      - Transparency mode lets you be aware of your surroundings for a natural listening experience.
-      - Up to 8 hours of listening time and up to 24 hours with charging case.
-      - 5-minute Fast Fuel charging gives up to 1 hour of playback.
-      - Built-in microphones give high-quality call performance and voice assistant interaction.
-      - Compatible with iOS and Android devices.
-      - Simple one-touch quick pair feature for Apple and Android phones.
-      - Supports “Hey Siri” and Beats App on Android for settings and updates.
-    `,
-    images: [
-      "https://img.freepik.com/premium-photo/blue-iron-isolated-white-background_432238-67.jpg?ga=GA1.1.2145612538.1736353082&semt=ais_hybrid&w=740&q=80",
-      "https://img.freepik.com/premium-photo/blue-iron-isolated-white-background_432238-67.jpg?ga=GA1.1.2145612538.1736353082&semt=ais_hybrid&w=740&q=80",
-      "https://img.freepik.com/premium-photo/blue-iron-isolated-white-background_432238-67.jpg?ga=GA1.1.2145612538.1736353082&semt=ais_hybrid&w=740&q=80",
-    ],
-    vendor: "Nupat Tech",
-  };
+  const getProduct = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}products/${id}`)
+      console.log(response.data)
+      setProduct(response.data)
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-  const [selectedImg, setSelectedImg] = useState(product.images[0]);
+  useEffect(() => {
+    getProduct()
+  }, [])
+
+  console.log(product)
+
+  const [selectedImg, setSelectedImg] = useState(null);
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+  if (product.imgUrl && product.imgUrl.length > 0) {
+    setSelectedImg(product.imgUrl[0]);
+  }
+}, [product]);
 
   const handleAddToCart = () => {
     addToCart({ ...product, quantity }); // ✅ pass quantity and product details
@@ -53,7 +55,7 @@ const ProductDetailsPage = () => {
 
           {/* Thumbnail images */}
           <div className="flex gap-3 mt-4">
-            {product.images.map((img, i) => (
+            {product.imgUrl?.map((img, i) => (
               <img
                 key={i}
                 src={img}
@@ -77,12 +79,12 @@ const ProductDetailsPage = () => {
 
           <div className="mt-4">
             <span className="text-2xl font-bold text-gray-900">
-              ₦{product.price.toLocaleString()}
+              ₦{product.price?.toLocaleString()}
             </span>
           </div>
 
           <p className="mt-4 text-sm">
-            Vendor: <Link className="text-customBlue">{product.vendor}</Link>
+            Vendor: <Link className="text-customBlue">{product.vendor.businessName}</Link>
           </p>
 
           <div className="mt-6 border-t border-gray-200 pt-4">
