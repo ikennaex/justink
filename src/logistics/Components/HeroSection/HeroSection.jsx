@@ -1,5 +1,6 @@
 import React from "react";
 import {loghero} from "../../../imports"; // ensure this is correct
+import { Search } from "lucide-react";
 
 const HeroSection = () => {
   return (
@@ -79,7 +80,7 @@ const HeroSection = () => {
             className="w-full mt-4 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2"
             style={{ backgroundColor: "#33751D" }}
           >
-            <span>🔍</span> Track Package
+            <span><Search /></span> Track Package
           </button>
 
           <p className="mt-4 text-center text-sm text-gray-500">

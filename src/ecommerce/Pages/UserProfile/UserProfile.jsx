@@ -2,18 +2,21 @@ import React from "react";
 import { Edit3, PackagePlus, User, Mail, Phone, MapPin } from "lucide-react";
 import { useUser } from "../../Contexts/UserContext";
 import { Link } from "react-router";
-
+import UserOrders from "../../Contexts/UserOrders";
+import EcomVendorProducts from "../../Components/Vendor/EcomVendorProducts";
 
 const UserProfile = () => {
-    const {user} = useUser()
-    console.log(user)
+  const { user } = useUser();
+  console.log(user);
   return (
-    <section className="w-full min-h-screen bg-gray-50 flex justify-center items-start py-10 px-4">
+    <section className="w-full min-h-screen bg-gray-50 flex flex-col items-center justify-center  py-10 px-4">
       <div className="bg-white w-full max-w-3xl rounded-2xl shadow-md p-8 relative">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           <img
-            src={user?.profileImage || "https://avatar.iran.liara.run/public/34"}
+            src={
+              user?.profileImage || "https://avatar.iran.liara.run/public/34"
+            }
             alt="User avatar"
             className="w-28 h-28 rounded-full object-cover border-4 border-indigo-500"
           />
@@ -32,10 +35,10 @@ const UserProfile = () => {
               {/* Show "Post a Product" if user.role === "vendor" */}
               {user?.role === "Vendor" && (
                 <Link to={"/ecommerce/new-product"}>
-                <button className="flex items-center gap-1 px-3 py-2 text-sm bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition">
-                  <PackagePlus size={16} />
-                  Post a Product
-                </button>
+                  <button className="flex items-center gap-1 px-3 py-2 text-sm bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition">
+                    <PackagePlus size={16} />
+                    Post a Product
+                  </button>
                 </Link>
               )}
             </div>
@@ -62,22 +65,16 @@ const UserProfile = () => {
             <span>{user?.address || "Lagos, Nigeria"}</span>
           </div>
         </div>
+      </div>
 
-        {/* Stats Section */}
-        <div className="mt-10 grid grid-cols-3 gap-4">
-          <div className="text-center">
-            <p className="text-lg font-semibold text-gray-800">{user?.posts || 0}</p>
-            <p className="text-sm text-gray-500">Products</p>
-          </div>
-          <div className="text-center">
-            <p className="text-lg font-semibold text-gray-800">{user?.followers || 0}</p>
-            <p className="text-sm text-gray-500">Followers</p>
-          </div>
-          <div className="text-center">
-            <p className="text-lg font-semibold text-gray-800">{user?.following || 0}</p>
-            <p className="text-sm text-gray-500">Following</p>
-          </div>
+      {user.role === "Vendor" && (
+        <div className="w-full">
+          <EcomVendorProducts />
         </div>
+      )}
+
+      <div className="w-full">
+        <UserOrders />
       </div>
     </section>
   );

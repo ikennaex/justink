@@ -67,7 +67,7 @@ const EcomNewProduct = () => {
         location: "",
       });
       setPreviews([]);
-      navigate("/ecommerce/profile/:id");
+      navigate("/ecommerce/profile");
     } catch (err) {
       console.error(err);
       alert("Failed to upload product");
