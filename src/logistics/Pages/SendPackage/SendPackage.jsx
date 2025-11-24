@@ -1,39 +1,94 @@
-import React, { useState } from 'react';
+import axios from "axios";
+import React, { useState } from "react";
+import { baseUrl } from "../../../ecommerce/baseUrl";
+import TrackingModal from "../../Components/TrackingModal/TrackingModal";
 
 const SendPackage = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [trackingNumber, setTrackingNumber] = useState("");
   const [formData, setFormData] = useState({
-    senderName: '',
-    senderPhone: '',
-    senderEmail: '',
-    senderAddress: '',
-    senderCity: '',
-    receiverName: '',
-    receiverPhone: '',
-    receiverEmail: '',
-    receiverAddress: '',
-    receiverCity: '',
-    packageName: '',
-    packageDescription: '',
-    packageWeight: '',
-    packageCategory: '',
-    isFragile: 'No',
+    senderName: "",
+    senderPhone: "",
+    senderEmail: "",
+    senderAddress: "",
+    senderCity: "",
+    receiverName: "",
+    receiverPhone: "",
+    receiverEmail: "",
+    receiverAddress: "",
+    receiverCity: "",
+    packageName: "",
+    packageDescription: "",
+    packageWeight: "",
+    packageCategory: "",
+    isFragile: "No",
+    pickUp: "pickup",
+    pickUpAddress: "",
   });
+
+  const payload = {
+    sender: {
+      fullName: formData.senderName,
+      phone: formData.senderPhone,
+      email: formData.senderEmail,
+      address: formData.senderAddress + ", " + formData.senderCity,
+    },
+
+    receiver: {
+      fullName: formData.receiverName,
+      phone: formData.receiverPhone,
+      email: formData.receiverEmail,
+      address: formData.receiverAddress + ", " + formData.receiverCity,
+    },
+
+    package: {
+      type: formData.packageCategory,
+      weight: Number(formData.packageWeight),
+      description: formData.packageDescription,
+      value: 0,
+    },
+
+    pickup: {
+      pickupType: formData.pickUp,
+      pickupAddress: formData.pickUpAddress,
+      pickupDate: new Date(),
+    },
+
+    // pricing: {
+    //   baseFee: 1500,
+    //   distanceFee: 500,
+    //   weightFee: Number(formData.packageWeight) * 100,
+    //   total: 1500 + 500 + Number(formData.packageWeight) * 100,
+    // },
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
+
+    try {
+      const response = await axios.post(`${baseUrl}logistics/send-package`, payload);
+      alert(response.data.message);
+      console.log(response.data);
+      setTrackingNumber(response.data.shipment.trackingNumber);
+      setShowModal(true)
+    } catch (err) {
+      console.error(err);
+      alert(err.response.data.message);
+    }
   };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-50 shadow-lg rounded-lg">
+      {showModal && (
+        <TrackingModal trackingNumber={trackingNumber} showModal = {showModal}/>
+      )}
       <h2 className="text-2xl font-bold mb-6 text-center">Send a Package</h2>
       <form onSubmit={handleSubmit} className="space-y-8">
-
         {/* Sender Information */}
         <section className="bg-white p-6 rounded-lg shadow-sm">
           <h3 className="text-xl font-semibold mb-4">Sender Information</h3>
@@ -193,6 +248,31 @@ const SendPackage = () => {
               <option value="No">Fragile: No</option>
               <option value="Yes">Fragile: Yes</option>
             </select>
+
+            <select
+              name="pickUp"
+              value={formData.pickUp}
+              onChange={handleChange}
+              className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
+              <option value="dropoff">Drop Off</option>
+              <option value="pickup">Pick Up</option>
+            </select>
+
+            {formData.pickUp === "pickup" && (
+              <input
+                name="pickUpAddress"
+                label="Pick Up Address"
+                placeholder="Enter Pick Up Address"
+                type="text"
+                onChange={handleChange}
+                value={formData.pickUpAddress}
+                min="0"
+                step="0.01"
+                required
+                className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+              />
+            )}
           </div>
         </section>
 
