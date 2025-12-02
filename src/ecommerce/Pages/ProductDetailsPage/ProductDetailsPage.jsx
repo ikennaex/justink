@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Minus, Plus, ShoppingCart, CreditCard } from "lucide-react";
+import { Minus, Plus, ShoppingCart, CreditCard, Heart } from "lucide-react";
 import { Link, useParams } from "react-router";
 import { useCart } from "../../Contexts/CartContext"; 
 import axios from "axios";
@@ -15,6 +15,15 @@ const ProductDetailsPage = () => {
       const response = await axios.get(`${baseUrl}products/${id}`)
       console.log(response.data)
       setProduct(response.data)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const favoriteProduct = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}favorite/${id}`)
+      console.log(response.data)
     } catch (err) {
       console.log(err);
     }
@@ -86,6 +95,7 @@ const ProductDetailsPage = () => {
           <p className="mt-4 text-sm">
             Vendor: <Link className="text-customBlue">{product.vendor?.businessName || "N/A"}</Link>
           </p>
+          <Heart className="text-red-500 curs or-pointer mt-5" />
 
           <div className="mt-6 border-t border-gray-200 pt-4">
             <h3 className="font-semibold mb-2">About product</h3>

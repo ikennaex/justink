@@ -7,12 +7,12 @@ const EcomRegisterPage = () => {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  console.log(email, fullName, password)
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await axios.post(`${baseUrl}auth/register`, {
@@ -20,28 +20,27 @@ const EcomRegisterPage = () => {
         fullName,
         password,
       });
-      console.log(response.data);
+
       alert(response.data.message);
       navigate("/ecommerce/login");
     } catch (err) {
-      console.log(err);
-      alert(err.response.data.message);
+      alert(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-8">
-        {/* Header */}
+        
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Create Your Account
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-800">Create Your Account</h1>
           <p className="text-gray-500 text-sm mt-2">
             Join JustLink and start shopping smarter today.
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleRegister} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -87,19 +86,21 @@ const EcomRegisterPage = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-lg transition"
+            disabled={loading}
+            className={`w-full text-white font-semibold py-2.5 rounded-lg transition 
+            ${
+              loading
+                ? "bg-blue-400 cursor-not-allowed"
+                : "bg-blue-700 hover:bg-blue-800"
+            }`}
           >
-            Sign Up
+            {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
 
-        {/* Footer */}
         <p className="text-center text-sm text-gray-600 mt-6">
           Already have an account?{" "}
-          <Link
-            to="/ecommerce/login"
-            className="text-blue-700 font-semibold hover:underline"
-          >
+          <Link className="text-blue-700 font-semibold hover:underline" to="/ecommerce/login">
             Login
           </Link>
         </p>

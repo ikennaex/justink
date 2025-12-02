@@ -115,9 +115,15 @@ const EcomBecomeAVendor = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 bg-customBlue text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
+            disabled={loading}
+            className={`w-full text-white font-semibold py-2.5 rounded-lg transition 
+            ${
+              loading
+                ? "bg-blue-400 cursor-not-allowed"
+                : "bg-blue-700 hover:bg-blue-800"
+            }`}
           >
-            Register Store
+            {loading ? "Registering..." : "Register stor"}
           </button>
         </form>
 

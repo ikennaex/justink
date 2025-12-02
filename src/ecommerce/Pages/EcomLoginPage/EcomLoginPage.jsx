@@ -81,7 +81,7 @@ const EcomLoginPage = () => {
             type="submit"
             className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2.5 rounded-lg transition disabled:bg-customBlue/50"
           >
-            {loading ? "Processing..." : "Sign In"}
+            {loading ? "Login in..." : "Sign In"}
           </button>
         </form>
 
