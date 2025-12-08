@@ -65,7 +65,7 @@ const TrackHome = () => {
         </div>
 
         <p className="text-sm text-gray-200 mt-3 text-center">
-          Example: FCN20249383XLD
+          Example: JSL027097109
         </p>
       </div>
 

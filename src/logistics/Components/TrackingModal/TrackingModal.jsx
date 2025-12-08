@@ -10,7 +10,7 @@ const TrackingModal = ({ trackingNumber }) => {
   };
 
   const trackPackage = () => {
-    navigate(`/logistics/track/${trackingNumber}`);
+    navigate(`/logistics/track`);
   };
 
   return (
