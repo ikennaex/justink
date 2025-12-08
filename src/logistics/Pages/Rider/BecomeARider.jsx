@@ -1,40 +1,108 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
+import { baseUrl } from '../../baseUrl'
+import axios from 'axios'
 
 const BecomeARider = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    location: "",
-  });
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
+    location: ''
+  })
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
+  const [locationLoading, setLocationLoading] = useState(false)
+  const [locationName, setLocationName] = useState('')
+  
   const isFormValid = Object.values(formData).every(
-    (value) => value.trim() !== ""
-  );
+    (value) => value.trim() !== ''
+  )
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Rider application submitted:", formData);
-    alert("Application submitted successfully! We will contact you soon.");
+  const getCurrentLocation = () => {
+    setLocationLoading(true)
+    
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser')
+      setLocationLoading(false)
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords
+        const coordinates = `${latitude},${longitude}`
+        
+        try {
+          // Reverse geocoding using OpenStreetMap Nominatim API
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          )
+          const data = await response.json()
+          
+          // Set the display name for user to see
+          const displayName = data.display_name || coordinates
+          setLocationName(displayName)
+          
+          // Set coordinates for backend
+          setFormData((prev) => ({
+            ...prev,
+            location: coordinates
+          }))
+          
+          setLocationLoading(false)
+        } catch (error) {
+          console.error('Error fetching location name:', error)
+          setLocationName(coordinates)
+          setFormData((prev) => ({
+            ...prev,
+            location: coordinates
+          }))
+          setLocationLoading(false)
+        }
+      },
+      (error) => {
+        console.error('Error getting location:', error)
+        alert('Unable to retrieve your location. Please check your permissions.')
+        setLocationLoading(false)
+      }
+    )
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.post(`${baseUrl}logistics/becomearider`, {
+        name:formData.name,
+        phone:formData.phone,
+        email:formData.email,
+        location:formData.location,
+        password:formData.password
+      })
+      console.log(response.data)
+      alert('Application submitted successfully.')
+    } catch (err) {
+      console.log(err);
+    }
+    console.log('Rider application submitted:', formData)
     // Reset form
     setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      password: "",
-      location: "",
-    });
-  };
+      name: '',
+      email: '',
+      phone: '',
+      password: '',
+      location: ''
+    })
+    setLocationName('')
+  }
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
@@ -123,15 +191,31 @@ const BecomeARider = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Location
               </label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent outline-none transition"
-                placeholder="City or area"
-                required
-              />
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={locationName || formData.location}
+                    readOnly
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 outline-none"
+                    placeholder="Use current location"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={getCurrentLocation}
+                    disabled={locationLoading}
+                    className="px-4 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed whitespace-nowrap"
+                  >
+                    {locationLoading ? 'Loading...' : '📍 Current'}
+                  </button>
+                </div>
+                {formData.location && (
+                  <p className="text-xs text-gray-500">
+                    Coordinates: {formData.location}
+                  </p>
+                )}
+              </div>
             </div>
 
             <button
@@ -139,11 +223,11 @@ const BecomeARider = () => {
               disabled={!isFormValid}
               className={`w-full py-3 rounded-lg font-semibold text-white transition-all mt-6
                 ${
-                isFormValid
-                    ? "bg-amber-600 hover:bg-amber-700"
-                    : "bg-gray-300 cursor-not-allowed"
+                  isFormValid
+                    ? 'bg-amber-600 hover:bg-amber-700'
+                    : 'bg-gray-300 cursor-not-allowed'
                 }
-            `}
+              `}
             >
               Submit Application
             </button>
@@ -151,17 +235,17 @@ const BecomeARider = () => {
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-6">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <span
             className="font-medium cursor-pointer"
-            style={{ color: "#D97706" }}
+            style={{ color: '#D97706' }}
           >
             Sign in
           </span>
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BecomeARider;
+export default BecomeARider
