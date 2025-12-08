@@ -20,6 +20,7 @@ import Contact from './logistics/Pages/Contact/Contact'
 import Services from './logistics/Pages/Services/Services'
 import About from './logistics/Pages/About/About'
 import SendPackage from './logistics/Pages/SendPackage/SendPackage'
+import BecomeARider from './logistics/Pages/Rider/BecomeARider'
 
 const App = () => {
 
@@ -58,6 +59,7 @@ const App = () => {
           <Route path='/logistics/services' element={<Services />} />
           <Route path='/logistics/about' element={<About />} />
           <Route path='/logistics/sendpackage' element={<SendPackage />} />
+          <Route path='/logistics/become-a-rider' element={<BecomeARider />} />
         </Routes>
       </div>
 
