@@ -5,12 +5,14 @@ import { useCart } from "../../Contexts/CartContext";
 import axios from "axios";
 import { baseUrl } from "../../baseUrl";
 import { useUser } from "../../Contexts/UserContext";
+import ProductRatings from "../../Components/ProductRatings/ProductRatings";
 
 const ProductDetailsPage = () => {
   const { addToCart } = useCart();
   const [product, setProduct] = useState({});
   const [selectedImg, setSelectedImg] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [ratings, setRatings] = useState([])
 
   const { id } = useParams();
   const { api } = useUser();
@@ -59,7 +61,7 @@ const ProductDetailsPage = () => {
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) {
-        navigate("/login/");
+        navigate("/ecommerce/login");
         return;
       }
 
@@ -88,10 +90,22 @@ const ProductDetailsPage = () => {
     }
   };
 
+  // get ratings 
+  const getRatings = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}rating/${id}`)
+      console.log(response.data)
+      setRatings(response.data.ratings)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   // On Component Mount
   useEffect(() => {
     getProduct();
     getFavoriteProduct();
+    getRatings()
   }, []);
 
   // Update selected image when product loads
@@ -228,7 +242,14 @@ const ProductDetailsPage = () => {
             </button>
           </div>
         </div>
+
       </div>
+        {/* ratings  */}
+        {ratings && (
+        <div className="mt-20">
+          <ProductRatings ratings = {ratings}/>
+        </div>
+        )}
     </section>
   );
 };
