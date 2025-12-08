@@ -49,8 +49,9 @@ const HeroSection = () => {
               Send Package</Link>
             </button>
 
-            <button className="hover:border hover:border-white px-5 py-3 rounded-xl bg-orange-600 transition">
-              Become a Rider
+            <button className="border bg-[#EA580C] border-white px-5 py-3 rounded-xl ">
+              <Link to='become-a-rider'>
+              Become a rider</Link>
             </button>
           </div>
         </div>
