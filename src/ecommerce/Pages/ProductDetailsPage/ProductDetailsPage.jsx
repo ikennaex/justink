@@ -6,6 +6,8 @@ import axios from "axios";
 import { baseUrl } from "../../baseUrl";
 import { useUser } from "../../Contexts/UserContext";
 import ProductRatings from "../../Components/ProductRatings/ProductRatings";
+import Loader from "../../../Loaders/Loader";
+import { FaLessThanEqual } from "react-icons/fa";
 
 const ProductDetailsPage = () => {
   const { addToCart } = useCart();
@@ -21,19 +23,24 @@ const ProductDetailsPage = () => {
   // Bookmark state
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [bookmarkId, setBookmarkId] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   // Fetch Single Product
   const getProduct = async () => {
+    setLoading(true)
     try {
       const response = await axios.get(`${baseUrl}products/${id}`);
       setProduct(response.data);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false)
     }
   };
 
   // Fetch User Bookmarks
   const getFavoriteProduct = async () => {
+    setLoading(true)
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) return; // ignore checking if not logged in
@@ -53,11 +60,14 @@ const ProductDetailsPage = () => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false)
     }
   };
 
   // Add Bookmark
   const favoriteProduct = async () => {
+    setLoading(true)
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -73,11 +83,14 @@ const ProductDetailsPage = () => {
       setBookmarkId(response.data.bookmark?._id);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false)
     }
   };
 
   // Remove Bookmark
   const removeFavorite = async () => {
+    setLoading(true)
     try {
       await api.delete(`${baseUrl}bookmark/${id}`);
       alert("Removed from bookmarks");
@@ -87,17 +100,22 @@ const ProductDetailsPage = () => {
       setBookmarkId(null);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false)
     }
   };
 
   // get ratings 
   const getRatings = async () => {
+    setLoading(true)
     try {
       const response = await axios.get(`${baseUrl}rating/${id}`)
       console.log(response.data)
       setRatings(response.data.ratings)
     } catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -120,6 +138,10 @@ const ProductDetailsPage = () => {
     addToCart({ ...product, quantity });
     alert(`${product.name} added to cart`);
   };
+
+  if (loading) {
+    return <Loader/>
+  }
 
   return (
     <section className="bg-gray-50 py-10 px-6 md:px-12">

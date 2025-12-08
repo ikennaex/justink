@@ -1,25 +1,27 @@
 import React, { useState } from "react";
 import { Search, Package, MapPin, CheckCircle, Truck } from "lucide-react";
+import axios from "axios";
+import { baseUrl } from "../../../ecommerce/baseUrl";
 
 const TrackHome = () => {
   const [trackingCode, setTrackingCode] = useState("");
-  const [showResult, setShowResult] = useState(false);
+  const [packageData, setPackageData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleTrack = () => {
-    if (trackingCode.trim() === "") return;
-    setShowResult(true);
-  };
-
-  // Fake demo package data
-  const packageInfo = {
-    image:
-      "https://images.unsplash.com/photo-1607082349566-187342175e0c?auto=format&fit=crop&w=800&q=80",
-    weight: "2.4 kg",
-    dimensions: "32 x 20 x 14 cm",
-    type: "Electronics",
-    origin: "Lagos Warehouse",
-    destination: "Abuja City Center",
-    estimated: "Feb 18, 2025",
+  const handleTrack = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.post(`${baseUrl}logistics/track-package`, {
+        trackingNumber: trackingCode,
+      });
+      setPackageData(response.data);
+    } catch (err) {
+      console.error(err);
+      setPackageData(null);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,7 +48,6 @@ const TrackHome = () => {
       {/* Tracking Box */}
       <div className="w-full max-w-2xl relative z-20">
         <div className="bg-white/15 backdrop-blur-xl border border-white/20 p-5 rounded-2xl shadow-2xl flex flex-col md:flex-row items-center gap-3">
-          {/* Input */}
           <input
             type="text"
             placeholder="Enter your tracking code..."
@@ -54,26 +55,23 @@ const TrackHome = () => {
             onChange={(e) => setTrackingCode(e.target.value)}
             className="flex-1 w-full px-4 py-4 rounded-xl text-gray-900 focus:outline-none text-lg bg-white"
           />
-
-          {/* Responsive Button */}
           <button
             onClick={handleTrack}
             className="w-full md:w-auto bg-[#33751D] hover:bg-[#285a16] active:scale-95 transition-all text-white px-6 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 text-lg shadow-lg"
           >
             <Search size={20} />
-            Track
+            {loading ? "Loading..." : "Track"}
           </button>
         </div>
 
         <p className="text-sm text-gray-200 mt-3 text-center">
-          Example: FCN-2024-9383-XLD
+          Example: FCN20249383XLD
         </p>
       </div>
 
       {/* Tracking Results */}
-      {showResult && (
+      {packageData && (
         <div className="w-full max-w-2xl bg-white text-gray-900 rounded-2xl shadow-2xl p-8 mt-12 relative z-20 animate-fadeIn space-y-10">
-
           {/* Tracking Header */}
           <div>
             <h3 className="text-2xl font-bold mb-6 text-[#33751D] flex items-center gap-2">
@@ -82,10 +80,10 @@ const TrackHome = () => {
 
             <div className="mb-6">
               <p className="text-md">
-                <strong>Tracking Code:</strong> {trackingCode}
+                <strong>Tracking Number:</strong> {packageData.trackingNumber}
               </p>
               <p>
-                <strong>Status:</strong> In Transit
+                <strong>Status:</strong> {packageData.status}
               </p>
             </div>
 
@@ -96,9 +94,9 @@ const TrackHome = () => {
                   <CheckCircle size={16} />
                 </div>
                 <div>
-                  <h4 className="font-semibold">Package Received</h4>
+                  <h4 className="font-semibold">Package Registered</h4>
                   <p className="text-gray-600 text-sm">
-                    Your package has been registered at our facility.
+                    Package from {packageData.sender.fullName} has been registered at our facility.
                   </p>
                 </div>
               </div>
@@ -110,82 +108,47 @@ const TrackHome = () => {
                 <div>
                   <h4 className="font-semibold">In Transit</h4>
                   <p className="text-gray-600 text-sm">
-                    Left Lagos Hub — currently on the way.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 opacity-50">
-                <div className="w-6 h-6 border-2 border-[#33751D] rounded-full"></div>
-                <div>
-                  <h4 className="font-semibold">Out for Delivery</h4>
-                  <p className="text-gray-600 text-sm">
-                    Awaiting arrival at the destination city.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 opacity-50">
-                <div className="w-6 h-6 border-2 border-[#33751D] rounded-full"></div>
-                <div>
-                  <h4 className="font-semibold">Delivered</h4>
-                  <p className="text-gray-600 text-sm">
-                    Will be marked completed once received.
+                    Pickup from {packageData.pickup.pickupAddress} on {new Date(packageData.pickup.pickupDate).toLocaleDateString()}.
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* PACKAGE INFO CARD */}
+          {/* Package Info */}
           <div className="bg-gray-100 rounded-xl p-6 shadow-inner">
             <h3 className="text-xl font-bold text-[#33751D] mb-4 flex items-center gap-2">
               <Truck size={20} /> Package Information
             </h3>
 
             <div className="flex flex-col md:flex-row gap-6">
-              {/* Image */}
-              <div className="w-full md:w-40 h-40 rounded-lg overflow-hidden shadow-lg">
-                <img
-                  src={packageInfo.image}
-                  alt="Package"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* Info */}
               <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
+                  <p className="font-semibold">Sender</p>
+                  <p className="text-gray-700">{packageData.sender.fullName} - {packageData.sender.address}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Receiver</p>
+                  <p className="text-gray-700">{packageData.receiver.fullName} - {packageData.receiver.address}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Item Description</p>
+                  <p className="text-gray-700">{packageData.package?.description || packageData.description}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Item Type</p>
+                  <p className="text-gray-700">{packageData.package?.type || packageData.type}</p>
+                </div>
+                <div>
                   <p className="font-semibold">Weight</p>
-                  <p className="text-gray-700">{packageInfo.weight}</p>
+                  <p className="text-gray-700">{packageData.package?.weight || packageData.weight} kg</p>
                 </div>
                 <div>
-                  <p className="font-semibold">Dimensions</p>
-                  <p className="text-gray-700">{packageInfo.dimensions}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">Category</p>
-                  <p className="text-gray-700">{packageInfo.type}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">Est. Delivery</p>
-                  <p className="text-gray-700">{packageInfo.estimated}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">From</p>
-                  <p className="text-gray-700">{packageInfo.origin}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">To</p>
-                  <p className="text-gray-700">{packageInfo.destination}</p>
+                  <p className="font-semibold">Pickup Type</p>
+                  <p className="text-gray-700">{packageData.pickup.pickupType}</p>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Footer Note */}
-          <div className="text-sm text-gray-500 border-t pt-4">
-            *This is a demo. Connect your API for live tracking data.
           </div>
         </div>
       )}

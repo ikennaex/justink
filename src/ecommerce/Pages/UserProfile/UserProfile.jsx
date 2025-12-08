@@ -5,15 +5,18 @@ import { Link } from "react-router";
 import UserOrders from "../../Contexts/UserOrders";
 import EcomVendorProducts from "../../Components/Vendor/EcomVendorProducts";
 import { baseUrl } from "../../baseUrl";
+import Loader from "../../../Loaders/Loader";
 
 const UserProfile = () => {
   const { user, api } = useUser();
 
   const [favoriteProducts, setFavoriteProducts] = useState([]);
   const [loadingFav, setLoadingFav] = useState(true);
+  const [loading, setLoading] = useState(false)
 
   // Fetch bookmarked product IDs + full products
   const getFavoriteProduct = async () => {
+    setLoading(true)
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -47,12 +50,17 @@ const UserProfile = () => {
       console.log(err);
     } finally {
       setLoadingFav(false);
+      setLoading(false)
     }
   };
 
   useEffect(() => {
     getFavoriteProduct();
   }, []);
+
+  if (loading) {
+    return <Loader/>
+  }
 
   return (
     <section className="w-full min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">

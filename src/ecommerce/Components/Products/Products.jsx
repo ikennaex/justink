@@ -2,24 +2,33 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import {baseUrl} from "../../baseUrl"
 import axios from "axios";
+import Loader from "../../../Loaders/Loader";
 
 const Products = () => {
 
   const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const getProducts = async () => {
+    setLoading(true)
     try {
       const response = await axios.get(`${baseUrl}products`)
       console.log(response.data)
       setProducts(response.data)
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false)
     }
   }
 
   useEffect(() => {
     getProducts()
   }, [])
+
+  if (loading) {
+  return <Loader />;
+}
 
   return (
     <div className="max-w-7xl mx-auto px-4 mt-10">

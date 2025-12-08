@@ -3,7 +3,7 @@ import "./loader.css"
 
 const Loader = () => {
   return (
-    <div className="loader">
+    <div className="loader m-40 items-center mx-auto">
     <div className="bar1"></div>
     <div className="bar2"></div>
     <div className="bar3"></div>
