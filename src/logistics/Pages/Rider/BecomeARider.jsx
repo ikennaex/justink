@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { baseUrl } from "../../baseUrl";
 import axios from "axios";
 import Loader from "../../../Loaders/Loader";
+import { Link } from "react-router";
 
 const BecomeARider = () => {
   const [formData, setFormData] = useState({
@@ -244,10 +245,9 @@ const BecomeARider = () => {
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{" "}
           <span
-            className="font-medium cursor-pointer"
-            style={{ color: "#D97706" }}
-          >
-            Sign in
+            className="font-medium cursor-pointer text-[#D97706]"
+          ><Link to='/logistics/login'>
+            Sign in</Link>
           </span>
         </p>
       </div>

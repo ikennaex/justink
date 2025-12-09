@@ -21,6 +21,7 @@ import Services from './logistics/Pages/Services/Services'
 import About from './logistics/Pages/About/About'
 import SendPackage from './logistics/Pages/SendPackage/SendPackage'
 import BecomeARider from './logistics/Pages/Rider/BecomeARider'
+import RiderLogin from './logistics/Pages/Rider/RiderLogin'
 
 const App = () => {
 
@@ -60,6 +61,7 @@ const App = () => {
           <Route path='/logistics/about' element={<About />} />
           <Route path='/logistics/sendpackage' element={<SendPackage />} />
           <Route path='/logistics/become-a-rider' element={<BecomeARider />} />
+          <Route path='/logistics/login' element={<RiderLogin />} />
         </Routes>
       </div>
 

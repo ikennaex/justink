@@ -62,7 +62,7 @@ const HeroSection = () => {
             className="text-2xl font-bold text-center"
             style={{ color: "#33751D" }}
           >
-            Track Your Shipment
+            Track Your Package
           </h2>
 
           <p className="mt-2 text-center text-gray-500 text-sm">
@@ -82,7 +82,7 @@ const HeroSection = () => {
             className="w-full mt-4 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2"
             style={{ backgroundColor: "#33751D" }}
           >
-            <span><Search /></span> Track Package
+            <span><Search /></span> <Link to='track'>Track Package</Link>
           </button>
 
           <p className="mt-4 text-center text-sm text-gray-500">
