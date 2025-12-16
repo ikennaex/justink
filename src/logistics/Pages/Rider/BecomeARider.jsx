@@ -18,6 +18,8 @@ const BecomeARider = () => {
   const [locationName, setLocationName] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  const [images, setImages] = useState([]);
+
   const isFormValid = Object.values(formData).every(
     (value) => value.trim() !== ""
   );
@@ -28,6 +30,19 @@ const BecomeARider = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+    const handleImageChange = (e) => {
+    setImages([...e.target.files]);
+  };
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    const previews = files.map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
+    setImages([...images, ...previews]);
   };
 
   const getCurrentLocation = () => {
@@ -85,13 +100,31 @@ const BecomeARider = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
+    const data = new FormData();
+
+    data.append("name", formData.name);
+  data.append("email", formData.email);
+  data.append("phone", formData.phone);
+  data.append("password", formData.password);
+  data.append("location", formData.location);
+
+  // Append images
+  images.forEach((image) => {
+    data.append("images", image.file); // Use image.file since you're storing objects
+  });
+
+  console.log("Payload being sent:");
+  // Note: You can't console.log FormData directly, use this instead:
+  for (let [key, value] of data.entries()) {
+    console.log(key, value);
+  }
+
     try {
-      const response = await axios.post(`${baseUrl}logistics/becomearider`, {
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        location: formData.location,
-        password: formData.password,
+      const response = await axios.post(`${baseUrl}logistics/becomearider`, data, 
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       console.log(response.data);
       alert("Application submitted successfully.");
@@ -226,6 +259,19 @@ const BecomeARider = () => {
                 )}
               </div>
             </div>
+
+            {/* Images */}
+        <div>
+          <label className="block mb-1 font-medium">Upload an image for Identificaiton (NIN / Drivers License)</label>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleFileChange}
+            className="w-full"
+            required
+          />
+        </div>
 
             <button
           type="submit"

@@ -78,12 +78,14 @@ const HeroSection = () => {
           />
 
           {/* Button */}
+          <Link to='/logistics/track'>
           <button
             className="w-full mt-4 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2"
             style={{ backgroundColor: "#33751D" }}
           >
-            <span><Search /></span> <Link to='track'>Track Package</Link>
+            <span><Search /></span> Track Package
           </button>
+          </Link>
 
           <p className="mt-4 text-center text-sm text-gray-500">
             Need help?{" "}
