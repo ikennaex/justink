@@ -67,7 +67,7 @@ const AdminLogin = () => {
               value={formData.email}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="admin@justlink.com"
+              placeholder="johndoe@gmail.com"
             />
           </div>
 

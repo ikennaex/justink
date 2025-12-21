@@ -35,6 +35,7 @@ import Transactions from "./Admin/pages/Transactions";
 import Shipments from "./Admin/pages/Shipments";
 import ApproveRiders from "./Admin/pages/ApproveRiders";
 import RiderDetailsPage from "./Admin/pages/RiderDetailsPage";
+import AdminProtectedRoutes from "./Contexts/AdminProtectedRoutes";
 
 const App = () => {
   const location = useLocation();
@@ -89,18 +90,20 @@ const App = () => {
           </Route>
 
           {/* Admin Routes */}
-          <Route path="/admin" element={<AdminDashboard />}>
-            <Route index element={<AdminStats />} />
-            <Route path="riders" element={<Riders />} />
-            <Route path="shipments" element={<Shipments />} />
-            <Route path="transactions" element={<Transactions />} />
-            <Route path="approve-riders" element={<ApproveRiders />} />
-            <Route path="rider-details/:id" element={<RiderDetailsPage />} />
+
+          <Route element={<AdminProtectedRoutes />}>
+            <Route path="/admin" element={<AdminDashboard />}>
+              <Route index element={<AdminStats />} />
+              <Route path="riders" element={<Riders />} />
+              <Route path="shipments" element={<Shipments />} />
+              <Route path="transactions" element={<Transactions />} />
+              <Route path="approve-riders" element={<ApproveRiders />} />
+              <Route path="rider-details/:id" element={<RiderDetailsPage />} />
+            </Route>
           </Route>
 
-        <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
         </Routes>
-
       </div>
 
       {/* Show footer only for ecommerce */}
