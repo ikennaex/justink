@@ -1,5 +1,5 @@
 import React from "react";
-import {loghero} from "../../../imports"; // ensure this is correct
+import {box, loghero} from "../../../imports"; // ensure this is correct
 import { Search } from "lucide-react";
 import { Link } from "react-router";
 
@@ -12,7 +12,7 @@ const HeroSection = () => {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${loghero})`,
+          backgroundImage: `url(${box})`,
           filter: "blur(4px)",
         }}
       ></div>

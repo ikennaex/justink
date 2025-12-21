@@ -44,7 +44,7 @@ const About = () => {
           <div className="relative">
             <div className="bg-[#33751D] absolute -top-4 -left-4 w-full h-full rounded-3xl opacity-20"></div>
             <img
-              src={aboutimg}
+              src="/images/homepageimg.jpeg"
               alt="Logistics warehouse"
               className="relative rounded-3xl shadow-xl object-cover w-full h-[380px]"
             />
