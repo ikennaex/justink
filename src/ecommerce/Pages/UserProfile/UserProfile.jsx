@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Edit3, PackagePlus, Mail, Phone, MapPin } from "lucide-react";
-import { useUser } from "../../Contexts/UserContext";
+import { useUser } from "../../../Contexts/UserContext";
 import { Link } from "react-router";
-import UserOrders from "../../Contexts/UserOrders";
+import UserOrders from "../../../Contexts/UserOrders";
 import EcomVendorProducts from "../../Components/Vendor/EcomVendorProducts";
 import { baseUrl } from "../../baseUrl";
 import Loader from "../../../Loaders/Loader";
@@ -138,9 +138,6 @@ const UserProfile = () => {
                   ₦{product.price?.toLocaleString()}
                 </p>
 
-                <p className="text-sm text-gray-500">
-                  Vendor: {product.vendor?.businessName || "N/A"}
-                </p>
               </Link>
             ))}
           </div>

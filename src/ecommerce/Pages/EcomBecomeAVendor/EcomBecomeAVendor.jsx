@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { baseUrl } from "../../baseUrl";
-import { useUser } from "../../Contexts/UserContext";
+import { useUser } from "../../../Contexts/UserContext";
 import { useNavigate } from "react-router";
 
 const EcomBecomeAVendor = () => {

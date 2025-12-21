@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { baseUrl } from "../../baseUrl";
 import axios from "axios";
 import Loader from "../../../Loaders/Loader";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useRiderAuth } from "../../../Contexts/RiderContext";
 
 const BecomeARider = () => {
+  const {isAuthenticated} = useRiderAuth()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,9 +19,9 @@ const BecomeARider = () => {
   const [locationLoading, setLocationLoading] = useState(false);
   const [locationName, setLocationName] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
 
-  const [images, setImages] = useState([]);
-
+  const [image, setImage] = useState(null);
   const isFormValid = Object.values(formData).every(
     (value) => value.trim() !== ""
   );
@@ -32,18 +34,18 @@ const BecomeARider = () => {
     }));
   };
 
-    const handleImageChange = (e) => {
-    setImages([...e.target.files]);
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
   };
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    const previews = files.map((file) => ({
-      file,
-      url: URL.createObjectURL(file),
-    }));
-    setImages([...images, ...previews]);
-  };
+  // const handleFileChange = (e) => {
+  //   const files = Array.from(e.target.files);
+  //   const previews = files.map((file) => ({
+  //     file,
+  //     url: URL.createObjectURL(file),
+  //   }));
+  //   setImage([...image, ...previews]);
+  // };
 
   const getCurrentLocation = () => {
     setLocationLoading(true);
@@ -57,33 +59,34 @@ const BecomeARider = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        const coordinates = `${latitude},${longitude}`;
 
         try {
-          // Reverse geocoding using OpenStreetMap Nominatim API
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
           );
           const data = await response.json();
 
-          // Set the display name for user to see
-          const displayName = data.display_name || coordinates;
-          setLocationName(displayName);
+          setLocationName(data.display_name || `${latitude}, ${longitude}`);
 
-          // Set coordinates for backend
+          // ALWAYS send valid JSON to backend
           setFormData((prev) => ({
             ...prev,
-            location: coordinates,
+            location: JSON.stringify({
+              coordinates: [longitude, latitude],
+            }),
           }));
-
-          setLocationLoading(false);
         } catch (error) {
           console.error("Error fetching location name:", error);
-          setLocationName(coordinates);
+
+          setLocationName(`${latitude}, ${longitude}`);
+
           setFormData((prev) => ({
             ...prev,
-            location: coordinates,
+            location: JSON.stringify({
+              coordinates: [longitude, latitude],
+            }),
           }));
+        } finally {
           setLocationLoading(false);
         }
       },
@@ -103,33 +106,37 @@ const BecomeARider = () => {
     const data = new FormData();
 
     data.append("name", formData.name);
-  data.append("email", formData.email);
-  data.append("phone", formData.phone);
-  data.append("password", formData.password);
-  data.append("location", formData.location);
+    data.append("email", formData.email);
+    data.append("phone", formData.phone);
+    data.append("password", formData.password);
+    data.append("location", formData.location);
 
-  // Append images
-  images.forEach((image) => {
-    data.append("images", image.file); // Use image.file since you're storing objects
-  });
+    data.append("riderId", image);
 
-  console.log("Payload being sent:");
-  // Note: You can't console.log FormData directly, use this instead:
-  for (let [key, value] of data.entries()) {
-    console.log(key, value);
-  }
+    console.log("Payload being sent:");
+    // // Note: You can't console.log FormData directly, use this instead:
+    // for (let [key, value] of data.entries()) {
+    //   console.log(key, value);
+    // }
 
     try {
-      const response = await axios.post(`${baseUrl}logistics/becomearider`, data, 
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        `${baseUrl}logistics/becomearider`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       console.log(response.data);
       alert("Application submitted successfully.");
+      navigate("/logistics/login");
     } catch (err) {
       console.log(err);
+      alert(
+        err.response?.data?.message || "Submission failed. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -144,7 +151,13 @@ const BecomeARider = () => {
     });
     setLocationName("");
   };
+  
 
+    useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/logistics/rider-dashboard");
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
@@ -261,39 +274,38 @@ const BecomeARider = () => {
             </div>
 
             {/* Images */}
-        <div>
-          <label className="block mb-1 font-medium">Upload an image for Identificaiton (NIN / Drivers License)</label>
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleFileChange}
-            className="w-full"
-            required
-          />
-        </div>
+            <div>
+              <label className="block mb-1 font-medium">
+                Upload an image for Identificaiton (NIN / Drivers License)
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="w-full"
+                required
+              />
+            </div>
 
             <button
-          type="submit"
-          onClick={handleSubmit}
-          disabled={!isFormValid || submitting}
-          className={`w-full p-3 text-white rounded-md transition ${
-            isFormValid && !submitting
-              ? "bg-amber-600 hover:bg-amber-700"
-              : "bg-gray-400 cursor-not-allowed"
-          }`}
-        >
-          {submitting ? "Submitting..." : "Submit"}
-        </button>
+              type="submit"
+              onClick={handleSubmit}
+              disabled={!isFormValid || submitting}
+              className={`w-full p-3 text-white rounded-md transition ${
+                isFormValid && !submitting
+                  ? "bg-amber-600 hover:bg-amber-700"
+                  : "bg-gray-400 cursor-not-allowed"
+              }`}
+            >
+              {submitting ? "Submitting..." : "Submit"}
+            </button>
           </div>
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{" "}
-          <span
-            className="font-medium cursor-pointer text-[#D97706]"
-          ><Link to='/logistics/login'>
-            Sign in</Link>
+          <span className="font-medium cursor-pointer text-[#D97706]">
+            <Link to="/logistics/login">Sign in</Link>
           </span>
         </p>
       </div>

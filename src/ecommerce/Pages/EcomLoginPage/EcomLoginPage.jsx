@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { baseUrl } from "../../baseUrl";
-import { useUser } from "../../Contexts/UserContext";
+import { useUser } from "../../../Contexts/UserContext";
 
 const EcomLoginPage = () => {
   const [email, setEmail] = useState("");

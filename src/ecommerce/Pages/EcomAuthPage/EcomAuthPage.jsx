@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { useUser } from "../../Contexts/UserContext";
+import { useUser } from "../../../Contexts/UserContext";
 import { baseUrl } from "../../baseUrl";
 
 const EcomAuthPage = ({ showModal, setShowModal }) => {

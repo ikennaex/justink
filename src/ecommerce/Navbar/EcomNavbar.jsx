@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Menu, X, ShoppingCart, User } from "lucide-react";
 import { logo } from "../../imports";
 import { Link } from "react-router";
-import { useCart } from "../Contexts/CartContext";
-import { useUser } from "../Contexts/UserContext";
+import { useCart } from "../../Contexts/CartContext";
+import { useUser } from "../../Contexts/UserContext";
 
 const EcomNavbar = () => {
   const { totalItems } = useCart();

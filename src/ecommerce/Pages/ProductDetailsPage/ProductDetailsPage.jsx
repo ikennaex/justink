@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Minus, Plus, ShoppingCart, Heart } from "lucide-react";
 import { Link, useParams, useNavigate } from "react-router";
-import { useCart } from "../../Contexts/CartContext";
+import { useCart } from "../../../Contexts/CartContext";
 import axios from "axios";
 import { baseUrl } from "../../baseUrl";
-import { useUser } from "../../Contexts/UserContext";
+import { useUser } from "../../../Contexts/UserContext";
 import ProductRatings from "../../Components/ProductRatings/ProductRatings";
 import Loader from "../../../Loaders/Loader";
 import { FaLessThanEqual } from "react-icons/fa";

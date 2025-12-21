@@ -1,8 +1,42 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { baseUrl } from "../../baseUrl";
+import { useRiderAuth } from "../../../Contexts/RiderContext";
+import { useNavigate } from "react-router";
 
 const RiderLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { loginRider, isAuthenticated } = useRiderAuth();
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post(`${baseUrl}logistics/rider-login`, {
+        email,
+        password,
+      });
+      console.log(response);
+      loginRider(response.data.token, response.data.rider);
+      alert(response.data.message);
+      navigate("/logistics/rider-dashboard");
+    } catch (err) {
+      setLoading(true);
+      console.log(err);
+      alert(err.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/logistics/rider-dashboard");
+    }
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -34,10 +68,12 @@ const RiderLogin = () => {
         </div>
 
         <button
+          disabled={loading}
+          onClick={handleLogin}
           className="w-full py-2 rounded-lg text-white font-semibold"
           style={{ backgroundColor: "#D97706" }}
         >
-          Login
+          {loading ? "Processing..." : "Login"}
         </button>
 
         <p className="text-center text-sm text-gray-600 mt-4 cursor-pointer hover:underline">

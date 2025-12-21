@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useUser } from "../../Contexts/UserContext";
+import { useUser } from "../../../Contexts/UserContext";
 import { useNavigate } from "react-router";
 import { TbCurrencyNaira } from "react-icons/tb";
 import PaystackPop from "@paystack/inline-js";

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useCart } from "../../Contexts/CartContext";
+import { useCart } from "../../../Contexts/CartContext";
 import { Trash2, Plus, Minus } from "lucide-react";
 import EcomAuthPage from "../EcomAuthPage/EcomAuthPage";
-import { useUser } from "../../Contexts/UserContext";
+import { useUser } from "../../../Contexts/UserContext";
 import EcomCheckout from "../../Components/Checkout/EcomCheckout";
 
 const EcomCartPage = () => {

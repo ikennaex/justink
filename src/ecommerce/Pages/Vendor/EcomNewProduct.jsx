@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { baseUrl } from "../../baseUrl";
 import { useNavigate } from "react-router";
-import { useUser } from "../../Contexts/UserContext";
+import { useUser } from "../../../Contexts/UserContext";
 
 const EcomNewProduct = () => {
   const [product, setProduct] = useState({

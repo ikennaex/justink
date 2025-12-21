@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { baseUrl } from "../baseUrl";
 import axios from "axios";
+import { baseUrl } from "../baseUrl";
 
 // Create context
 const UserContext = createContext();
