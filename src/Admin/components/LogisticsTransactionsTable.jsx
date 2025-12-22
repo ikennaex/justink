@@ -1,4 +1,4 @@
-export default function TransactionsTable({ transactions }) {
+export default function LogisticsTransactionsTable({ transactions }) {
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
       <table className="w-full text-sm">

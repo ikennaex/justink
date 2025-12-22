@@ -13,17 +13,26 @@ export default function AdminDashboard() {
           <Link to="/admin" className="block px-4 py-2 rounded hover:bg-gray-100">
             Dashboard
           </Link>
+          <Link to="/admin/vendors" className="block px-4 py-2 rounded hover:bg-gray-100">
+            Vendors
+          </Link>
           <Link to="/admin/riders" className="block px-4 py-2 rounded hover:bg-gray-100">
             Riders
           </Link>
           <Link to="/admin/shipments" className="block px-4 py-2 rounded hover:bg-gray-100">
             Shipments
           </Link>
-          <Link to="/admin/transactions" className="block px-4 py-2 rounded hover:bg-gray-100">
-            Transactions
-          </Link>
           <Link to="/admin/approve-riders" className="block px-4 py-2 rounded hover:bg-gray-100">
             Approve Riders
+          </Link>
+          <Link to="/admin/approve-vendors" className="block px-4 py-2 rounded hover:bg-gray-100">
+            Approve Vendors
+          </Link>
+          <Link to="/admin/ecom-transactions" className="block px-4 py-2 rounded hover:bg-gray-100">
+            Ecommerce Transactions
+          </Link>
+          <Link to="/admin/logistics-transactions" className="block px-4 py-2 rounded hover:bg-gray-100">
+            Logistics Transactions
           </Link>
         </nav>
       </aside>

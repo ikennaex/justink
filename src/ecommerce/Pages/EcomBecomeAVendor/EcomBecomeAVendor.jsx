@@ -123,7 +123,7 @@ const EcomBecomeAVendor = () => {
                 : "bg-blue-700 hover:bg-blue-800"
             }`}
           >
-            {loading ? "Registering..." : "Register stor"}
+            {loading ? "Registering..." : "Register store"}
           </button>
         </form>
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import TransactionsTable from "../components/TransactionsTable";
 import { useAdminAuth } from "../../Contexts/AdminContext";
+import LogisticsTransactionsTable from "../components/LogisticsTransactionsTable";
 
-export default function Transactions() {
+export default function LogisticsTransactions() {
   const { api } = useAdminAuth();
 
   const [transactions, setTransactions] = useState([]);
@@ -11,7 +11,7 @@ export default function Transactions() {
   const fetchTransactions = async () => {
     setLoading(true);
     try {
-      const res = await api.get("/admin/ecom/transactions");
+      const res = await api.get("/admin/logistics/transactions");
       console.log(res);
       setTransactions(res.data.transactions);
     } catch (err) {
@@ -32,7 +32,7 @@ export default function Transactions() {
       {loading ? (
         <p className="text-sm text-gray-500">Loading transactions...</p>
       ) : (
-        <TransactionsTable transactions={transactions} />
+        <LogisticsTransactionsTable transactions={transactions} />
       )}
     </div>
   );

@@ -20,6 +20,11 @@ export default function AdminStats() {
   }, [])
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div><p className="font-bold">Ecommerce</p></div>
+      <StatCard title="Total Users" value={stats?.totalUsers} />
+      <StatCard title="Active Vendors" value={stats?.activeVendors} />
+      <StatCard title="Pending Vendors" value={stats?.pendingVendors} />
+      <div><p className="font-bold">Logistics</p></div>
       <StatCard title="Total Shipments" value={stats?.totalShipments} />
       <StatCard title="Active Riders" value={stats?.activeRiders} />
       <StatCard title="Pending Riders" value={stats?.inactiveRiders} />

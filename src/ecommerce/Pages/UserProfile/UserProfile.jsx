@@ -12,11 +12,11 @@ const UserProfile = () => {
 
   const [favoriteProducts, setFavoriteProducts] = useState([]);
   const [loadingFav, setLoadingFav] = useState(true);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   // Fetch bookmarked product IDs + full products
   const getFavoriteProduct = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -50,7 +50,7 @@ const UserProfile = () => {
       console.log(err);
     } finally {
       setLoadingFav(false);
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -59,7 +59,7 @@ const UserProfile = () => {
   }, []);
 
   if (loading) {
-    return <Loader/>
+    return <Loader />;
   }
 
   return (
@@ -68,7 +68,9 @@ const UserProfile = () => {
       <div className="bg-white w-full max-w-3xl rounded-2xl shadow-md p-8">
         <div className="flex flex-col sm:flex-row items-center gap-6">
           <img
-            src={user?.profileImage || "https://avatar.iran.liara.run/public/34"}
+            src={
+              user?.profileImage || "https://avatar.iran.liara.run/public/34"
+            }
             alt="User avatar"
             className="w-28 h-28 rounded-full object-cover border-4 border-indigo-500"
           />
@@ -76,6 +78,9 @@ const UserProfile = () => {
           <div className="text-center sm:text-left flex-1">
             <h2 className="text-2xl font-semibold">{user?.fullName}</h2>
             <p className="capitalize text-gray-500">{user?.role}</p>
+            {user?.role === "Vendor" && user?.isVendorApproved === false && (
+              <p className="text-red-600">Your application is pending</p>
+            )}
 
             <div className="flex flex-wrap gap-2 mt-3 justify-center sm:justify-start">
               <button className="flex items-center gap-1 px-3 py-2 text-sm bg-indigo-100 text-indigo-700 rounded-md">
@@ -83,8 +88,8 @@ const UserProfile = () => {
                 Edit Profile
               </button>
 
-              {user?.role === "Vendor" && (
-                <Link to={"/ecommerce/new-product"}>
+              {user?.role === "Vendor" && user?.isVendorApproved && (
+                <Link to="/ecommerce/new-product">
                   <button className="flex items-center gap-1 px-3 py-2 text-sm bg-green-100 text-green-700 rounded-md">
                     <PackagePlus size={16} />
                     Post a Product
@@ -137,7 +142,6 @@ const UserProfile = () => {
                 <p className="text-indigo-600 font-bold">
                   ₦{product.price?.toLocaleString()}
                 </p>
-
               </Link>
             ))}
           </div>

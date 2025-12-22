@@ -26,16 +26,20 @@ import RiderDashboard from "./logistics/Pages/RiderDashboard/RiderDashboard";
 import RiderProtectedRoutes from "./Contexts/RiderProtectedRoutes";
 import RidersTable from "./Admin/components/RidersTable";
 import ShipmentsTable from "./Admin/components/ShipmentsTable";
-import TransactionsTable from "./Admin/components/TransactionsTable";
+import TransactionsTable from "./Admin/components/EcomTransactionsTable";
 import AdminDashboard from "./Admin/AdminDashboard";
 import AdminStats from "./Admin/components/AdminStats";
 import AdminLogin from "./Admin/pages/AdminLogin";
 import Riders from "./Admin/pages/Riders";
-import Transactions from "./Admin/pages/Transactions";
+import Transactions from "./Admin/pages/EcomTransactions";
 import Shipments from "./Admin/pages/Shipments";
 import ApproveRiders from "./Admin/pages/ApproveRiders";
 import RiderDetailsPage from "./Admin/pages/RiderDetailsPage";
 import AdminProtectedRoutes from "./Contexts/AdminProtectedRoutes";
+import ApproveVendors from "./Admin/pages/ApproveVendors";
+import Vendors from "./Admin/pages/Vendors";
+import EcomTransactions from "./Admin/pages/EcomTransactions";
+import LogisticsTransactions from "./Admin/pages/LogisticsTransactions";
 
 const App = () => {
   const location = useLocation();
@@ -95,9 +99,12 @@ const App = () => {
             <Route path="/admin" element={<AdminDashboard />}>
               <Route index element={<AdminStats />} />
               <Route path="riders" element={<Riders />} />
+              <Route path="vendors" element={<Vendors />} />
               <Route path="shipments" element={<Shipments />} />
-              <Route path="transactions" element={<Transactions />} />
+              <Route path="ecom-transactions" element={<EcomTransactions />} />
+              <Route path="logistics-transactions" element={<LogisticsTransactions />} />
               <Route path="approve-riders" element={<ApproveRiders />} />
+              <Route path="approve-vendors" element={<ApproveVendors />} />
               <Route path="rider-details/:id" element={<RiderDetailsPage />} />
             </Route>
           </Route>
