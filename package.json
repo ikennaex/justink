@@ -21,7 +21,15 @@
     "react-dom": "^19.1.1",
     "react-icons": "^5.5.0",
     "react-router": "^7.9.5",
-    "react-router-dom": "^7.9.6"
+    "react-router-dom": "^7.9.6",
+    "@emailjs/browser": "^4.4.1",
+    "@fullpage/react-fullpage": "^0.1.49",
+    "@tailwindcss/vite": "^4.1.14",
+    "fullpage.js": "^4.0.37",
+    "react-countup": "^6.5.3",
+    "react-fast-marquee": "^1.6.5",
+    "react-fullpage": "^0.1.19",
+    "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

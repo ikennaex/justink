@@ -41,12 +41,23 @@ import Vendors from "./Admin/pages/Vendors";
 import EcomTransactions from "./Admin/pages/EcomTransactions";
 import LogisticsTransactions from "./Admin/pages/LogisticsTransactions";
 
+// Home Routes
+import StaticHomepage from "./Home/Pages/Homepage/Homepage";
+import StaticAbout from "./Home/Pages/About/About";
+import StaticServices from "./Home/Pages/Services/Services";
+import WhyChooseUs from "./Home/Pages/WhyChooseUs/WhyChooseUs";
+import ComingSoon from "./Home/Pages/ComingSoon";
+import HomeContact from "./Home/Pages/Contact/Contact";
+import Nav from "./Home/Components/Nav/Nav";
+import GetStarted from "./Home/Pages/GetStarted";
+
 const App = () => {
   const location = useLocation();
 
   // Detect which navbar to show
   const isLogistics = location.pathname.startsWith("/logistics");
   const isEcommerce = location.pathname.startsWith("/ecommerce");
+  const isHome = location.pathname === "/";
 
   return (
     <div>
@@ -55,9 +66,19 @@ const App = () => {
       {/* Conditionally show navbar */}
       {isEcommerce && <EcomNavbar />}
       {isLogistics && <LogisticsNav />}
+      {isHome && <Nav />}
 
-      <div className={`${isEcommerce || isLogistics ? "pt-16" : ""}`}>
+      <div className={`${isEcommerce || isLogistics || isHome? "pt-10" : ""}`}>
         <Routes>
+          {/* Home Routes  */}
+          <Route path="/" element={<StaticHomepage />} />
+          <Route path="/about" element={<StaticAbout />} />
+          <Route path="/services" element={<StaticServices />} />
+          <Route path="/why-choose-us" element={<WhyChooseUs />} />
+          <Route path="/contact" element={<HomeContact />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/getstarted" element={<GetStarted />} />
+
           {/* Ecommerce Routes */}
           <Route path="/ecommerce/register" element={<RegisterPage />} />
           <Route path="/ecommerce/login" element={<EcomLoginPage />} />
@@ -102,7 +123,10 @@ const App = () => {
               <Route path="vendors" element={<Vendors />} />
               <Route path="shipments" element={<Shipments />} />
               <Route path="ecom-transactions" element={<EcomTransactions />} />
-              <Route path="logistics-transactions" element={<LogisticsTransactions />} />
+              <Route
+                path="logistics-transactions"
+                element={<LogisticsTransactions />}
+              />
               <Route path="approve-riders" element={<ApproveRiders />} />
               <Route path="approve-vendors" element={<ApproveVendors />} />
               <Route path="rider-details/:id" element={<RiderDetailsPage />} />
