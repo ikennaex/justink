@@ -3,6 +3,13 @@ import React from "react";
 import { logo } from "../../../imports";
 import { Link } from "react-router-dom";
 
+const footerLinks = [
+  { label: "FAQs", href: "/faqs" },
+  { label: "Contact Us", href: "/contact" },
+  { label: "Return Policy", href: "/return-policy" },
+  // { label: "Shipping Info", href: "/shipping" },
+];
+
 const EcomFooter = () => {
   return (
     <footer className="bg-gray-900 text-white py-14 px-6 lg:px-16">
@@ -97,19 +104,17 @@ const EcomFooter = () => {
             {/* Support */}
             <div>
               <h4 className="text-lg font-semibold text-white mb-3">Support</h4>
-              <ul className="space-y-2 text-sm">
-                {["FAQs", "Contact Us", "Return Policy", "Shipping Info"].map(
-                  (item) => (
-                    <li key={item}>
-                      <a
-                        href="#"
-                        className="text-gray-300 hover:text-white transition-colors"
-                      >
-                        {item}
-                      </a>
-                    </li>
-                  )
-                )}
+              <ul>
+                {footerLinks.map((item) => (
+                  <li key={item.label}>
+                    <a
+                      href={item.href}
+                      className="text-gray-300 hover:text-white transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

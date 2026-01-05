@@ -50,6 +50,7 @@ import ComingSoon from "./Home/Pages/ComingSoon";
 import HomeContact from "./Home/Pages/Contact/Contact";
 import Nav from "./Home/Components/Nav/Nav";
 import GetStarted from "./Home/Pages/GetStarted";
+import ReturnPolicy from "./ecommerce/Components/ReturnPolicy/ReturnPolicy";
 
 const App = () => {
   const location = useLocation();
@@ -57,7 +58,7 @@ const App = () => {
   // Detect which navbar to show
   const isLogistics = location.pathname.startsWith("/logistics");
   const isEcommerce = location.pathname.startsWith("/ecommerce");
-  const isHome = location.pathname === "/";
+  const isHome = !isLogistics && !isEcommerce;
 
   return (
     <div>
@@ -78,6 +79,7 @@ const App = () => {
           <Route path="/contact" element={<HomeContact />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/getstarted" element={<GetStarted />} />
+          <Route path="/return-policy" element={<ReturnPolicy />} />
 
           {/* Ecommerce Routes */}
           <Route path="/ecommerce/register" element={<RegisterPage />} />
