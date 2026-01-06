@@ -1,0 +1,22 @@
+{
+  "name": "JustLink Logistics",
+  "short_name": "JustLink",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#006838",
+  "theme_color": "#006838",
+  "icons": [
+    {
+      "src": "/andriod-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/andriod-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
